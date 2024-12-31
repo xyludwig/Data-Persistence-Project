@@ -1,3 +1,4 @@
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,22 +7,29 @@ using UnityEngine.UI;
 
 public class MainManager : MonoBehaviour
 {
+
     public Brick BrickPrefab;
     public int LineCount = 6;
     public Rigidbody Ball;
 
+
     public Text ScoreText;
+    public Text BestScoreText;
     public GameObject GameOverText;
+
+    
     
     private bool m_Started = false;
     private int m_Points;
     
     private bool m_GameOver = false;
 
+
     
     // Start is called before the first frame update
     void Start()
     {
+        BestScoreText.text = ScoreManager.Instance.GetBestScoreText();
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -70,7 +78,19 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
+        if (ScoreManager.Instance.IsBestScore(m_Points))
+        {
+            ScoreManager.Instance.UpdateBestScore(m_Points);
+            BestScoreText.text = ScoreManager.Instance.GetBestScoreText();
+        }
         m_GameOver = true;
+        
         GameOverText.SetActive(true);
     }
+
+
+
+
+
+
 }
